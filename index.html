@@ -8,15 +8,24 @@
     <link rel="stylesheet" href="./css/style.css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,800,900"
         rel="stylesheet">
-    <title>Simulador</title>
+    <title>Calculadora IMC</title>
 </head>
 
 <body>
     <div class="caja">
-        <p>Si quieres calcular tu Índice de Masa Corporal y conocer tu Peso Ideal puedes hacer click en el siguiente
-            botón e ingresar primero tu peso y luego tu altura.</p>
+        <p>Si quieres calcular tu Índice de Masa Corporal y conocer tu Peso Ideal debes elegir tu género y luego hacer click en el botón "Calcular IMC". Luego tendrás que ingresar tu edad, peso y altura.</p>
         <br>
-        <div class="btn" onclick="calcularIMC();">Calcular IMC</div>
+
+        <p>Primero selecciona tu género:</p>
+        <form id="formulario" action="#" onsubmit="calcularIMC();">
+            <div id="genero">
+                <input type="radio" id="hombre" name="genero" value="hombre">
+                <label for="hombre">Hombre</label>
+                <input type="radio" id="mujer" name="genero" value="mujer">
+                <label for="mujer">Mujer</label>
+            </div>
+            <input id="imc" class="btn" type="submit" value="Calcular IMC">
+        </form>
     </div>
     <script src="./js/simulador.js"></script>
 </body>
