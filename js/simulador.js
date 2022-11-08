@@ -26,6 +26,8 @@ const tipoPeso = ["bajo", "saludable", "alto", "muy alto", "demasiado alto"];
 //  Variables que se definirán dentro de las funciones y se utilizarán fuera de ellas
 let obj;
 let nivelDePeso;
+let identificador;
+let errorElement = document.getElementById('error');
 
 function calcularPeso(genero, edad) {
     //  Genera lista de variables en formato string, luego se ejecutara este string como códgo js con eval()
@@ -43,7 +45,15 @@ function calcularPeso(genero, edad) {
 
 function nivel_peso(index) {
     //  Crear string con el nivel de peso correspondiente al usuario
-    nivelDePeso = 'Posee un peso ' + tipoPeso[index] + ' para su altura.';
+    nivelDePeso = 'Posee un peso <b>' + tipoPeso[index] + '</b> para su altura.';
+}
+
+//  Bloque de código reutilizable
+function reiniciarAnimacion() {
+    errorElement.style.animation = 'none';
+    errorElement.offsetHeight;
+    errorElement.style.animation = null;
+    errorElement.style.display = 'block';
 }
 
 // FUNCIÓN PRINCIPAL -----------------------------------
@@ -65,51 +75,71 @@ function calcularIMC() {
 
     //  Si el usuario no eligió su género, lo alertamos y terminamos la función
     if (!genero) {
-        alert('Debe elegir su género.')
+        reiniciarAnimacion();
+        errorElement.innerHTML = 'Debe elegir su género.';
         return;
         //  Si el usuario eligió su género, le pedimos el resto de variables
     } else {
         //  Pedimos que ingrese su edad  
-        edad = +(prompt('Ingrese su edad:'));
-        //  Nos aseguramos de que haya ingresado números
-        edad = parseInt(edad);
+        edad = document.getElementById('edad').value;
         //  Si la edad está vacía o el usuario ingresó 0
         if (edad == 0) {
-            alert('Error: ha olvidado ingresar su edad.');
+            reiniciarAnimacion();
+            errorElement.innerHTML = 'Debe ingresar su edad.';
+            document.getElementById('edad').style.backgroundColor = '#f8d7da';
+            document.getElementById('edad').style.border = '1px solid #f5c6cb';
             return;
         }
         //  Si el usuario ingresó texto en vez de números
         else if (isNaN(edad)) {
-            alert('Error: debe ingresar solo números.');
+            reiniciarAnimacion();
+            errorElement.innerHTML = 'Debe ingresar solo números.';
+            document.getElementById('edad').style.backgroundColor = '#f8d7da';
+            document.getElementById('edad').style.border = '1px solid #f5c6cb';
             return;
         }
         //  Pedimos que ingrese su peso
-        peso = +(prompt('Ingrese su peso:'));
-        //  Nos aseguramos de que haya ingresado números
-        peso = parseInt(peso);
+        peso = document.getElementById('peso').value;
         //  Si el peso está vacío o el usuario ingresó 0
         if (peso == 0) {
-            alert('Error: ha olvidado ingresar su peso.');
+            reiniciarAnimacion();
+            errorElement.innerHTML = 'Debe ingresar su peso.';
+            document.getElementById('edad').style.backgroundColor = '#fff';
+            document.getElementById('edad').style.border = 'unset';
+            document.getElementById('peso').style.backgroundColor = '#f8d7da';
+            document.getElementById('peso').style.border = '1px solid #f5c6cb';
             return;
         }
         //  Si el usuario ingresó texto en vez de números
         else if (isNaN(peso)) {
-            alert('Error: debe ingresar solo números.');
+            reiniciarAnimacion();
+            errorElement.innerHTML = 'Debe ingresar solo números.';
+            document.getElementById('edad').style.backgroundColor = '#fff';
+            document.getElementById('edad').style.border = '1px solid #f5c6cb';
+            document.getElementById('peso').style.backgroundColor = '#f8d7da';
+            document.getElementById('peso').style.border = '1px solid #f5c6cb';
             return;
         }
         //  Pedimos que ingrese su altura
-        altura = +(prompt('Ingrese su altura:'));
-        //  Nos aseguramos de que haya ingresado números
-        // parseFloat en vez de parseInt como los anteriores para permitir alturas con punto, ejemplo 1.68
-        altura = parseFloat(altura);
+        altura = document.getElementById('altura').value;
         //  Si la altura está vacía o el usuario ingresó 0
         if (altura == 0) {
-            alert('Error: ha olvidado ingresar su altura.');
+            reiniciarAnimacion();
+            errorElement.innerHTML = 'Debe ingresar su altura.';
+            document.getElementById('peso').style.backgroundColor = '#fff';
+            document.getElementById('peso').style.border = 'unset';
+            document.getElementById('altura').style.backgroundColor = '#f8d7da';
+            document.getElementById('altura').style.border = '1px solid #f5c6cb';
             return;
         }
         //  Si el usuario ingresó texto en vez de números
         else if (isNaN(altura)) {
-            alert('Error: debe ingresar solo números.');
+            reiniciarAnimacion();
+            errorElement.innerHTML = 'Debe ingresar solo números.';
+            document.getElementById('peso').style.backgroundColor = '#fff';
+            document.getElementById('peso').style.border = 'unset';
+            document.getElementById('altura').style.backgroundColor = '#f8d7da';
+            document.getElementById('altura').style.border = '1px solid #f5c6cb';
             return;
         }
     }
@@ -154,7 +184,8 @@ function calcularIMC() {
         }
     } else {
         //  Este error no debería aparecer nunca, pero entiendo que es buena práctica definirlo igual
-        alert('Hubo un error, intente otra vez.')
+        reiniciarAnimacion();
+        errorElement.innerHTML = 'Hubo un error, intente otra vez.';
         return;
     }
 
@@ -188,13 +219,51 @@ function calcularIMC() {
     // Calculamos cuál sería el peso ideal 
     let pesoIdealBase = (pesoNormal.de * (altura * altura)).toFixed(1);
     let pesoIdealTope = (pesoNormal.a * (altura * altura)).toFixed(1);
-    let pesoIdeal = 'Su peso ideal se encuentra entre ' + pesoIdealBase + 'kg y ' + pesoIdealTope + 'kg.';
+    let pesoIdeal = 'Su peso ideal se encuentra entre <b>' + pesoIdealBase + 'kg</b> y <b>' + pesoIdealTope + 'kg</b>.';
 
     //  Revisamos nuevamente que todas las variables se han ingresado correctamente
     if (peso && altura && edad) { //    Génnero no, ya que lo chequeamos anteriormente
-        alert('Su índice de masa corporal es: ' + imc + '.\n' + nivelDePeso + '\n' + pesoIdeal);
+        document.getElementById("modalBox").style.display = "block";
+
+        //  Operadores Avanzados: Single Line Conditional - Sugar Syntax ++
+        localStorage.length = 0 ? identificador = 1 : identificador = localStorage.length, identificador++;
+
+        let valores = [genero, edad, peso, altura, imc, pesoIdealBase, pesoIdealTope]
+        localStorage.setItem(identificador, JSON.stringify(valores));
+
+        document.getElementById('resultado').innerHTML = '<center>Su índice de masa corporal es: <b>' + imc + '</b><br>' + nivelDePeso + '<br>' + pesoIdeal + '</center>';
+        //  Si se obtiene el resultado, ocultamos todos los errores
+        errorElement.style.display = 'none';
     } else {
         //  Si el usuario ingresa por ejemplo su altura con coma 1,68 se mostrará este error
-        alert("Error: debe ingresar solo números.");
+        reiniciarAnimacion();
+        errorElement.innerHTML = 'Debe ingresar solo números.';
     }
 }
+
+//  EVENTOS ----------------------------------------------
+
+//  Llamar función Principal cuando se clickea el botón "Calcular IMC"
+document.getElementById("imc").addEventListener("click", calcularIMC);
+
+//  Cerrar modal box si se clickea sobre la "x"
+document.getElementById("cerrar").addEventListener("click", function () { document.getElementById("modalBox").style.display = "none"; location.reload(); });
+
+window.addEventListener('click', function () {
+    //  Cerrar modal box si se clckea en cualquier parte fuera del mismo
+    if (event.target == document.getElementById("modalBox")) {
+        document.getElementById("modalBox").style.display = "none";
+        location.reload();
+    }
+});
+
+// Comento evento 'load', fuera del evento carga más rápido y se evita la 'animación/delay' de caraga
+//window.addEventListener('load', function () {
+    //  Crear tabla obteniendo los datos de localStorage
+    for (let x = 1; x <= localStorage.length; x++) {
+        let retrievedScores = JSON.parse(localStorage[x]);
+        document.getElementById("historial").innerHTML += "<tr><td>" + retrievedScores['0'] + "</td><td>" + retrievedScores['1'] + "</td><td>" + retrievedScores['2'] + "kg</td><td>" + retrievedScores['3'] + "</td><td>" + retrievedScores['4'] + "</td><td> Entre " + retrievedScores['5'] + 'kg y ' + retrievedScores['6'] + "kg</td></tr>";
+    }
+    //  Si existen datos en localStorage, mostrar la tabla
+    localStorage.length != 0 ? document.getElementById('contenedor-historial').style.display = 'block' : null;
+//})

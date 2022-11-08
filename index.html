@@ -18,17 +18,55 @@
         <br>
 
         <p>Primero selecciona tu género:</p>
-        <form id="formulario" action="#" onsubmit="calcularIMC();">
-            <div id="genero">
-                <input type="radio" id="hombre" name="genero" value="hombre">
-                <label for="hombre">Hombre</label>
-                <input type="radio" id="mujer" name="genero" value="mujer">
-                <label for="mujer">Mujer</label>
-            </div>
-            <input id="imc" class="btn" type="submit" value="Calcular IMC">
-        </form>
+
+        <div id="genero">
+            <input type="radio" id="hombre" name="genero" value="hombre">
+            <label for="hombre">Hombre</label>
+            <input type="radio" id="mujer" name="genero" value="mujer">
+            <label for="mujer">Mujer</label>
+        </div>
+        <br>
+        <div style="display:flex;flex-direction:column;">
+            <label for="edad">Edad:</label>
+            <input type="text" id="edad" name="edad"><br>
+            <label for="peso">Peso:</label>
+            <input type="text" id="peso" name="peso"><br>
+            <label for="altura">Altura:</label>
+            <input type="text" id="altura" name="altura">
+        </div>
+        <br>
+        <div class="animated shake" id="error"></div>
+        <br>
+        <input id="imc" class="btn" type="submit" value="Calcular IMC">
     </div>
+
+    <div id="contenedor-historial">
+        <h2>Historial</h2>
+        <table id="historial">
+            <tr>
+                <th>Género</th>
+                <th>Edad</th>
+                <th>Peso</th>
+                <th>Altura</th>
+                <th>IMC</th>
+                <th>Peso ideal</th>
+            </tr>
+        </table>
+    </div>
+
+    <!-- The Modal -->
+    <div id="modalBox" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span id="cerrar">&times;</span>
+            <h2>Resultado</h2>
+            <br>
+            <p id="resultado"></p>
+        </div>
+    </div>
+
     <script src="./js/simulador.js"></script>
+
 </body>
 
 </html>
