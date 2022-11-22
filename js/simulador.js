@@ -222,7 +222,7 @@ function calcularIMC() {
 
     //  Revisamos nuevamente que todas las variables se han ingresado correctamente
     if (peso && altura && edad) { //    Génnero no, ya que lo chequeamos anteriormente
-        document.getElementById("modalBox").style.display = "block";
+        //document.getElementById("modalBox").style.display = "block";
 
         //  Definimos array vacío, para luego hacerle push con las consultas 
         let listaHistorial = []
@@ -242,7 +242,7 @@ function calcularIMC() {
             listaHistorial.push(itemHistorial)
             //  Volvemos a establecer la clave, actualizada
             localStorage.setItem('imcHistorial', JSON.stringify(listaHistorial))
-        //  Si no existe
+            //  Si no existe
         } else {
             //  Hacemos push con los datos de la consulta a la lista vacía
             listaHistorial.push(itemHistorial)
@@ -250,9 +250,21 @@ function calcularIMC() {
             localStorage.setItem('imcHistorial', JSON.stringify(listaHistorial))
         }
 
-        document.getElementById('resultado').innerHTML = '<center>Su índice de masa corporal es: <b>' + imc + '</b><br>' + nivelDePeso + '<br>' + pesoIdeal + '</center>';
         //  Si se obtiene el resultado, ocultamos todos los errores
         errorElement.style.display = 'none';
+
+        //  Libreria Sweet Alert para mostrar el resultado obtenido
+        swal.fire({
+            html: '<center>Su índice de masa corporal es: <b>' + imc + '</b><br>' + nivelDePeso + '<br>' + pesoIdeal + '</center>',
+            confirmButtonColor: '#0e9794',
+            //  Si el usuario hace click fuera de la alerta, recargamos la página para actualizar la tabla 
+            allowOutsideClick: () => location.reload()
+        }).then((result) => {
+            if (result.isConfirmed) {
+                //  Cuando el usuario presiona el botón 'OK', recargamos la página para actualizar la tabla
+                location.reload();
+            }
+        })
     } else {
         //  Si el usuario ingresa por ejemplo su altura con coma 1,68 se mostrará este error
         reiniciarAnimacion();
@@ -265,15 +277,13 @@ function calcularIMC() {
 //  Llamar función Principal cuando se clickea el botón "Calcular IMC"
 document.getElementById("imc").addEventListener("click", calcularIMC);
 
-//  Cerrar modal box si se clickea sobre la "x"
-document.getElementById("cerrar").addEventListener("click", function () { document.getElementById("modalBox").style.display = "none"; location.reload(); });
-
-window.addEventListener('click', function () {
-    //  Cerrar modal box si se clckea en cualquier parte fuera del mismo
-    if (event.target == document.getElementById("modalBox")) {
-        document.getElementById("modalBox").style.display = "none";
-        location.reload();
-    }
+//  Si el usuario hace click en 'ver-receta'
+document.getElementById("ver-receta").addEventListener("click", function () {
+    //  Cuando la info está cargada, la desocultamos y scrolleamos hacia ella
+    document.getElementById('receta').style.display = 'flex';
+    document.getElementById('receta').scrollIntoView();
+    //  Ocultar botón 'Ver Receta Recomendada'
+    document.getElementById("ver-receta").style.display = 'none';
 });
 
 // Comento evento 'load', fuera del evento carga más rápido y se evita la 'animación/delay' de caraga
@@ -284,5 +294,47 @@ for (let x = 0; x < JSON.parse(localStorage.getItem("imcHistorial")).length; x++
     document.getElementById("historial").innerHTML += "<tr><td>" + retrievedScores['0'] + "</td><td>" + retrievedScores['1'] + "</td><td>" + retrievedScores['2'] + "kg</td><td>" + retrievedScores['3'] + "</td><td>" + retrievedScores['4'] + "</td><td> Entre " + retrievedScores['5'] + 'kg y ' + retrievedScores['6'] + "kg</td></tr>";
 }
 //  Si existen datos en localStorage, mostrar la tabla
-JSON.parse(localStorage.getItem("imcHistorial")).length != 0 ? document.getElementById('contenedor-historial').style.display = 'block' : null;
+JSON.parse(localStorage.getItem("imcHistorial")).length != 0 ? document.getElementById('contenedor-historial').style.display = 'flex' : null;
 //})
+
+//  Precargamos la info traida y traducida con las APIs
+window.addEventListener('load', obtenerReceta())
+
+//  APIs
+
+//fetch('https://jsonplaceholder.typicode.com/posts')
+//    .then(response=>response.json())
+//    .then(data=>console.log(data[0].title))
+
+//  Defino variables para almacenar resultados obtenidos
+let titulo;
+let imagen;
+let instrucciones;
+
+//  Asincronía y fetch
+async function obtenerReceta() {
+    //  Api para obtener receta aleatoria
+    const respuesta = await fetch('https://api.spoonacular.com/recipes/random?apiKey=d2f8aa3d1e17425e8676f8021dcc61c4')
+    const data = await respuesta.json();
+    //  Obtenemos la imagen directamente
+    imagen = data.recipes[0].image
+
+    //  Api para traducir receta obtenida
+    const resTitle = await fetch("https://api.mymemory.translated.net/get?q=" + data.recipes[0].title + "&langpair=en|es",);
+    const dataTitle = await resTitle.json();
+    //  Obtenemos el titulo traducido
+    titulo = dataTitle.responseData.translatedText
+
+    //  Evitar que las instrucciones se pasen de 500 caracteres, es el límite que ofrece la api
+    limitedInstructions = data.recipes[0].instructions.substring(0, 500);
+
+    const resInstructions = await fetch("https://api.mymemory.translated.net/get?q=" + limitedInstructions + "&langpair=en|es",);
+    const dataInstructions = await resInstructions.json();
+    //  Obtenemos las instrucciones traducidas
+    instrucciones = dataInstructions.responseData.translatedText
+
+    //  Mostrar imagen, título e instrucciones de la receta en el HTML
+    document.getElementById('titulo-receta').innerHTML += titulo
+    document.getElementById('imagen-receta').src = imagen
+    document.getElementById('instrucciones-receta').innerHTML += instrucciones + '...'
+}

@@ -8,65 +8,71 @@
     <link rel="stylesheet" href="./css/style.css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,800,900"
         rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.11/dist/sweetalert2.all.min.js"></script>
     <title>Calculadora IMC</title>
 </head>
 
 <body>
-    <div class="caja">
-        <p>Si quieres calcular tu Índice de Masa Corporal y conocer tu Peso Ideal debes elegir tu género y luego hacer
-            click en el botón "Calcular IMC". Luego tendrás que ingresar tu edad, peso y altura.</p>
-        <br>
-
-        <p>Primero selecciona tu género:</p>
-
-        <div id="genero">
-            <input type="radio" id="hombre" name="genero" value="hombre">
-            <label for="hombre">Hombre</label>
-            <input type="radio" id="mujer" name="genero" value="mujer">
-            <label for="mujer">Mujer</label>
-        </div>
-        <br>
-        <div style="display:flex;flex-direction:column;">
-            <label for="edad">Edad:</label>
-            <input type="text" id="edad" name="edad"><br>
-            <label for="peso">Peso:</label>
-            <input type="text" id="peso" name="peso"><br>
-            <label for="altura">Altura:</label>
-            <input type="text" id="altura" name="altura">
-        </div>
-        <br>
-        <div class="animated shake" id="error"></div>
-        <br>
-        <input id="imc" class="btn" type="submit" value="Calcular IMC">
-    </div>
-
-    <div id="contenedor-historial">
-        <h2>Historial</h2>
-        <table id="historial">
-            <tr>
-                <th>Género</th>
-                <th>Edad</th>
-                <th>Peso</th>
-                <th>Altura</th>
-                <th>IMC</th>
-                <th>Peso ideal</th>
-            </tr>
-        </table>
-    </div>
-
-    <!-- The Modal -->
-    <div id="modalBox" class="modal">
-        <!-- Modal content -->
-        <div class="modal-content">
-            <span id="cerrar">&times;</span>
-            <h2>Resultado</h2>
+    <div class="flexContainer">
+        <div class="caja">
+            <p>Si quieres calcular tu Índice de Masa Corporal y conocer tu Peso Ideal debes elegir tu género y luego
+                hacer
+                click en el botón "Calcular IMC". Luego tendrás que ingresar tu edad, peso y altura.</p>
             <br>
-            <p id="resultado"></p>
+
+            <p>Primero selecciona tu género:</p>
+
+            <div id="genero">
+                <input type="radio" id="hombre" name="genero" value="hombre">
+                <label for="hombre">Hombre</label>
+                <input type="radio" id="mujer" name="genero" value="mujer">
+                <label for="mujer">Mujer</label>
+            </div>
+            <br>
+            <div style="display:flex;flex-direction:column;">
+                <label for="edad">Edad:</label>
+                <input type="text" id="edad" name="edad"><br>
+                <label for="peso">Peso:</label>
+                <input type="text" id="peso" name="peso"><br>
+                <label for="altura">Altura:</label>
+                <input type="text" id="altura" name="altura">
+            </div>
+            <br>
+            <div class="animated shake" id="error"></div>
+            <br>
+            <input id="imc" class="btn" type="submit" value="Calcular IMC">
+        </div>
+
+        <div id="contenedor-historial">
+            <h2>Historial</h2>
+            <table id="historial">
+                <tr>
+                    <th>Género</th>
+                    <th>Edad</th>
+                    <th>Peso</th>
+                    <th>Altura</th>
+                    <th>IMC</th>
+                    <th>Peso ideal</th>
+                </tr>
+            </table>
+            <br>
+            <div id="ver-receta" class="btn">⬇ Ver Receta Recomendada ⬇</div>
+        </div>
+
+    </div>
+
+    <div id="receta">
+        <div id="receta-contenedor">
+            <img src="" id="imagen-receta">
+            <div style="display:flex;flex-direction:column;padding:50px;">
+                <div id="titulo-receta" style="font-weight:bold;filter: drop-shadow(0 0 2px #000);"></div>
+                <br>
+                <div style="filter: drop-shadow(0 0 2px #000);" id="instrucciones-receta"></div>
+            </div>
         </div>
     </div>
 
     <script src="./js/simulador.js"></script>
-
 </body>
 
 </html>
